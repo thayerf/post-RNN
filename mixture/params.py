@@ -4,17 +4,17 @@ import utils as ut
 # Set parameters
 
 # Number of hidden layers
-num_hidden = 4
+num_hidden = 3
 # Number of nodes per hidden layer
 nodes = 32
 # Size of batches inS each step
-batch_size = 100
+batch_size = 150
 # Training Sample Size
-train_n = 500
+train_n = 250
 # Testing Sample Size
-test_n = 500
+test_n = 250
 # Learning rate
-step_size = 0.0001
+step_size = 0.00005
 # Number of steps per epoch
 steps_per_epoch = 150
 # Number of epochs

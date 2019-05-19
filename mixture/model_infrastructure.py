@@ -8,10 +8,17 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, TimeDistributed, SimpleRNN, Input
 from keras.utils import to_categorical
 from keras import optimizers
-# Define callbacks and generators
-# Define training data iterator
+# Build Model
 model = Sequential()
 
+# Add input layer
+model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 1)))
+# Add additional hidden layers
+for i in range(num_hidden-1):
+      model.add(SimpleRNN(nodes, return_sequences=True))
+# Add output layer
+model.add(SimpleRNN(1))
+# Define data iterator
 def genTraining(batch_size,train_n,sigma_theta):
     while True:
         # Get training data for step
@@ -21,30 +28,21 @@ def genTraining(batch_size,train_n,sigma_theta):
         batch_labels = junk['outcome']
         batch_data = junk['W'].reshape((batch_size,train_n,1))
         yield batch_data,batch_labels
-# Define callback for storing test miscoverage
-class miscover(callbacks.Callback):
-  def __init__(self, test,exact):
-    self.test = test   # get test data
-    self.exact = exact
-    self.miscover = []
-
-  def on_epoch_end(self, epoch, logs={}):
-    self.miscover.append(np.mean(np.abs(model.predict(self.test)>self.exact)))
-    print("Normal model estimate is greater than label value {:01.6f} of the time".format(self.miscover[-1]))
-    
+# Define callback for model averaging
 class average(callbacks.Callback):
   def __init__(self,test,exact,num_hidden):
     self.test = test   # get test data
-    self.exact = exact
-    self.miscover = []
+    self.exact = exact # get exact labels
+    self.avg_loss = []
     self.n = 0
     # Build Model
     self.avg_model = Sequential()
     # Add input layer
-    self.avg_model.add(SimpleRNN(32, return_sequences=True, input_shape=(None, 1)))
+    self.avg_model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 1)))
     # Add additional hidden layers
     for i in range(num_hidden-1):
           self.avg_model.add(SimpleRNN(nodes, return_sequences=True))
+    # Add output layer
     self.avg_model.add(SimpleRNN(1))
 
   def on_epoch_end(self, epoch, logs={}):
@@ -54,9 +52,8 @@ class average(callbacks.Callback):
           for i in range(np.size(curr_weights)):
                 curr_weights[i] = (1.0)/(self.n-burn_in)*new_weights[i] + ((self.n-1.0-burn_in)/(self.n - burn_in))*curr_weights[i]
           self.avg_model.set_weights(curr_weights)
-          self.miscover.append(np.mean((self.avg_model.predict(self.test)>self.exact)))
-          print("Averaged model estimate is greater than label value {:01.6f} of the time".format(self.miscover[-1]))
-          print("Averaged model loss: {:01.6f}".format(np.mean(np.abs(self.avg_model.predict(self.test)-self.exact))))
+          self.avg_loss.append(K.eval(pinball(self.avg_model.predict(self.test),self.exact)))
+          print("Averaged model loss: {:01.6f}".format(self.avg_loss[-1]))
     
     self.n = self.n+1
 
