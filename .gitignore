@@ -166,3 +166,11 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+mixture/average_preds
+mixture/pb_avg_miscover
+mixture/pb_miscover
+mixture/Stan/average_preds
+mixture/Stan/stan_preds
+pinball/average_preds
+pinball/pb_avg
+pinball/pb_mis
