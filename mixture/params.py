@@ -4,7 +4,7 @@ import utils as ut
 # Set parameters
 
 # Number of hidden layers
-num_hidden = 3
+num_hidden = 4
 # Number of nodes per hidden layer
 nodes = 32
 # Size of batches inS each step
@@ -13,14 +13,16 @@ batch_size = 150
 train_n = 250
 # Testing Sample Size
 test_n = 250
+# Testing Batch Size
+t_batch_size=500
 # Learning rate
-step_size = 0.00005
+step_size = 0.0001
 # Number of steps per epoch
 steps_per_epoch = 150
 # Number of epochs
-num_epochs = 200
+num_epochs = 300
 # Number of epochs to run before starting model averaging
-burn_in = 75.0
+burn_in = 100.0
 # Prior Variance
 sigma_theta = 0.1
 
@@ -36,11 +38,11 @@ np.random.seed(12345)
 sigma_posterior = pow(train_n + 1/pow(sigma_theta,2), -0.5)
 
 # Create Testing Data
-t_dat = gd.gen_batch(5000, test_n, sigma_theta)
+t_dat = gd.gen_batch(t_batch_size, test_n, sigma_theta)
 junk = ut.setup_nn_mat(t_dat)
 t_batch_labels = junk['outcome']
 
 
-t_batch_data = junk['W'].reshape((5000,test_n,1))
+t_batch_data = junk['W'].reshape((t_batch_size,test_n,1))
 t_sigma_posterior = pow(test_n + 1.0/pow(sigma_theta,2), -0.5)
 t_exact_quants = pow(t_sigma_posterior,2)*(test_n*np.mean(t_batch_data,axis=1))
