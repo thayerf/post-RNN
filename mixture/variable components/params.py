@@ -26,7 +26,7 @@ num_epochs = 300
 # Number of epochs to run before starting model averaging
 burn_in = 100.0
 # Prior Variance
-sigma_theta = 0.1
+sigma_theta = 0.5
 
 
 # Pinball parameter
