@@ -11,7 +11,7 @@ def gen_batch(m, n, sigma_theta):
   for i in range(m):
         for j in range(n):
               theta_true[i,j]= theta[i][z[i][j]]
-  X = theta_true + np.random.randn(m,n)
+  X = theta_true + 0.1*np.random.randn(m,n)
   labels = [np.max(theta[i]) for i in range(np.size(theta))]
   return({"X":X, "theta":labels})
   

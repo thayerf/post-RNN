@@ -7,7 +7,7 @@ import utils as ut
 num_hidden = 4
 # Number of nodes per hidden layer
 nodes = 32
-# Size of batches inS each step
+# Size of batches in each step
 batch_size = 150
 # Training Sample Size
 train_n = 250
@@ -18,11 +18,11 @@ t_batch_size=500
 # Learning rate
 step_size = 0.0001
 # Learning rate decay
-decay_size = .0001
+decay_size = .00001
 # Number of steps per epoch
 steps_per_epoch = 150
 # Number of epochs
-num_epochs = 300
+num_epochs = 200
 # Number of epochs to run before starting model averaging
 burn_in = 100.0
 # Prior Variance

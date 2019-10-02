@@ -4,20 +4,24 @@ import utils as ut
 import genDat as gd
 import numpy as np
 from params import *
-from keras.models import Sequential
+from keras.models import Sequential, Model
 from keras.layers import LSTM, Dense, TimeDistributed, SimpleRNN, Input
 from keras.utils import to_categorical
 from keras import optimizers
+import tensorflow as tf
 # Build Model
-model = Sequential()
+
 
 # Add input layer
-model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 1)))
-# Add additional hidden layers
-for i in range(num_hidden-1):
-      model.add(SimpleRNN(nodes, return_sequences=True))
-# Add output layer
-model.add(SimpleRNN(1))
+inp = Input(shape=(None,1), name = "net_input")
+l1= SimpleRNN(nodes, return_sequences=True)(inp)
+l2= SimpleRNN(nodes, return_sequences=True)(l1)
+l3= SimpleRNN(nodes, return_sequences=True)(l2)
+l4= SimpleRNN(nodes, return_sequences=True)(l2)
+# Add output layers
+o1 = SimpleRNN(1, activation = "linear", name = "o1")(l3)
+o2 = SimpleRNN(1, activation = "linear", name = "o2")(l4)
+model = Model(inputs=[inp], outputs=[o1,o2])
 # Define data iterator
 def genTraining(batch_size,train_n,sigma_theta):
     while True:
@@ -27,37 +31,21 @@ def genTraining(batch_size,train_n,sigma_theta):
         # We repeat the labels for each x in the sequence
         batch_labels = junk['outcome']
         batch_data = junk['W'].reshape((batch_size,train_n,1))
-        yield batch_data,batch_labels
-# Define callback for model averaging
-class average(callbacks.Callback):
-  def __init__(self,test,exact,num_hidden):
-    self.test = test   # get test data
-    self.exact = exact # get exact labels
-    self.avg_loss = []
-    self.n = 0
-    # Build Model
-    self.avg_model = Sequential()
-    # Add input layer
-    self.avg_model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 1)))
-    # Add additional hidden layers
-    for i in range(num_hidden-1):
-          self.avg_model.add(SimpleRNN(nodes, return_sequences=True))
-    # Add output layer
-    self.avg_model.add(SimpleRNN(1))
+        yield [batch_data,[batch_labels,batch_labels]]
 
-  def on_epoch_end(self, epoch, logs={}):
-    new_weights = model.get_weights()
-    curr_weights = self.avg_model.get_weights()
-    if(self.n >burn_in):
-          for i in range(np.size(curr_weights)):
-                curr_weights[i] = (1.0)/(self.n-burn_in)*new_weights[i] + ((self.n-1.0-burn_in)/(self.n - burn_in))*curr_weights[i]
-          self.avg_model.set_weights(curr_weights)
-          self.avg_loss.append(K.eval(pinball(self.avg_model.predict(self.test),self.exact)))
-          print("Averaged model loss: {:01.6f}".format(self.avg_loss[-1]))
-    
-    self.n = self.n+1
-
-def pinball(y_true, y_pred):
-    pin = K.mean(K.maximum(y_true - y_pred, 0) * tao +
-                 K.maximum(y_pred - y_true, 0) * (1 - tao))
+def pinball_combined(y_true, y_pred):
+    y_025, y_500,y_975 = tf.gather(y_pred,)
+    pin = K.mean(K.maximum(y_true - y_500, 0) * 0.5 +
+                 K.maximum(y_500 - y_true, 0) * 0.5)+K.mean(K.maximum(y_true - y_025, 0) * 0.025 + K.maximum(y_025 - y_true, 0) * 0.975)+K.mean(K.maximum(y_true - y_975, 0) * 0.975 + K.maximum(y_975 - y_true, 0) * 0.025)
+                 
     return pin
+
+
+def pin_025(y_true,y_pred):
+      y_025 = y_pred
+      pin = K.mean(K.maximum(.025 * (y_true-y_025), (.025-1) * (y_true-y_025)))
+      return pin
+def pin_975(y_true,y_pred):
+      y_975 = y_pred
+      pin = K.mean(K.maximum(.975 * (y_true-y_975), (.975-1) * (y_true-y_975)))
+      return pin
