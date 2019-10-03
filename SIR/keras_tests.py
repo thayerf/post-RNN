@@ -34,7 +34,7 @@ model.compile(loss= pinball,optimizer=adam, metrics = ["mean_squared_error"])
 history = model.fit_generator(genTraining(batch_size),epochs=num_epochs,
                               steps_per_epoch=steps_per_epoch,
                               validation_data = (t_batch_data,t_batch_labels),
-                              callbacks= [hist])
+                              callbacks= [hist], verbose = 2)
 # Save test data
 np.savetxt("labels.csv", t_batch_labels, delimiter=",")
 np.savetxt("data.csv", t_batch_data[:,:,0], delimiter=",")
@@ -42,3 +42,5 @@ np.savetxt("data.csv", t_batch_data[:,:,0], delimiter=",")
 np.savetxt("preds", model.predict(t_batch_data))
 # Save  model loss
 np.savetxt("loss", hist.history['val_loss'])
+# Save my model
+model.save("SIR_model")
