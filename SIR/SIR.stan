@@ -12,7 +12,7 @@ transformed parameters{
 }
 model {
   real S_0 = 98;
-  real I_0 = 2;
+  real I_0 = 2; // Initial number of infected is fixed here, but you could put a prior on this if you wanted to
   real N = 100;
   beta ~ gamma(9, 20);
   gamma ~ gamma(3, 20);

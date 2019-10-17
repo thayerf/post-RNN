@@ -1,15 +1,16 @@
-I <- read.csv("I_data.csv", header = FALSE)
-S <- read.csv("S_data.csv",header = FALSE)
-labels <- read.csv("labels.csv", header = FALSE)
+setwd("C:/Users/thaye_000/Dropbox/Noah and Thayer/RNN/SIR")
+
+I <- read.csv("data/I_data.csv", header = FALSE)
+S <- read.csv("data/S_data.csv",header = FALSE)
+labels <- read.csv("data/labels.csv", header = FALSE)
 loss <- read.csv("loss", header = FALSE)
 loss <- loss[,1]
 labels <- labels[,1]
-res <- rep(0,500)
 
 library(rstan)
 
-res <- rep(0,500)
-for(i in 1:500){
+res <- rep(0,2000)
+for(i in 1:2000){
   input_data <- c()
   input_data$S <- as.numeric(S[i,-1])
   input_data$I <- as.numeric(I[i,-1])
@@ -18,7 +19,7 @@ for(i in 1:500){
   res[i]<-summary(my_model)$summary[3,5]
 }
 
-sv_loss <- mean(0.5*abs(res-labels))
+stan_loss <- mean(0.5*abs(res-labels))
 preds <- read.csv("preds", header = FALSE)
 preds <- preds[,1]
 
