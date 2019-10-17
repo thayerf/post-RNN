@@ -36,9 +36,9 @@ history = model.fit_generator(genTraining(batch_size),epochs=num_epochs,
                               validation_data = (t_batch_data,t_batch_labels),
                               callbacks= [hist], verbose = 2)
 # Save test data
-np.savetxt("labels.csv", t_batch_labels, delimiter=",")
-np.savetxt("I_data.csv", t_batch_data[:,:,0], delimiter=",")
-np.savetxt("S_data.csv", t_batch_data[:,:,0], delimiter=",")
+np.savetxt("data/labels.csv", t_batch_labels, delimiter=",")
+np.savetxt("data/I_data.csv", t_batch_data[:,:,0], delimiter=",")
+np.savetxt("data/S_data.csv", t_batch_data[:,:,1], delimiter=",")
 
 # Save test set preds
 np.savetxt("preds", model.predict(t_batch_data))
