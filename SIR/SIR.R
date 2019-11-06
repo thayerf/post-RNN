@@ -40,18 +40,18 @@ preds50 <- append(preds50,quantile(extract(my_model)$mu,0.5))
 preds95 <- append(preds95,quantile(extract(my_model)$mu,0.95))
 }
 
-max.epoc <- 100
+max.epoc <- 400
 
 width <- 2
 
 colors <- c(rgb(56.25/255,34.50/255,113.25/255,0.3), rgb(0,0,1,0.8))
 
-inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 100))
+inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 400))
+pdf("sir.pdf", width = 6, height = 4)
+plot(inds.to.use,loss, type = 'n', yaxs ='i', xlab = "Epoch", ylab = "risk", ylim = c(0.00,2.0))
+lines(inds.to.use,predict(loess(loss~c(1:400), span = 0.1)), lwd = width, col = colors[1])
+abline(h= stan_loss, lwd= width,lty = 2, col = "red")
+legend(x = 'topright', legend=c("RNN", "Stan"),
+       col=c(colors[1],"red"), lty=c(1,2), cex=0.8)
 
-pdf("sv.pdf", width = 6, height = 4)
-plot(inds.to.use,loss, type = 'n', yaxs ='i', xlab = "Epoch", ylab = "risk", ylim = c(0.00,3.0))
-lines(inds.to.use,loss, lwd = width, col = colors[1])
-abline(h= sv_loss, lwd= width,lty = 2,col = "red")
-legend(x = 'topright', legend=c("RNN", "stochvol"),
-       col=c(colors[1], "red"), lty=c(1,2), cex=0.8)
 dev.off()

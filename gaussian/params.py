@@ -8,7 +8,7 @@ num_hidden = 2
 # Number of nodes per hidden layer
 nodes = 32
 # Size of batches inS each step
-batch_size = 150
+batch_size = 50
 # Training Sample Size
 train_n = 30
 # Testing Sample Size
@@ -18,13 +18,13 @@ t_batch_size=500
 # Learning rate
 step_size = 0.001
 # Number of steps per epoch
-steps_per_epoch = 100
+steps_per_epoch = 1
 # Number of epochs
-num_epochs = 1000
+num_epochs = 200
 # Number of epochs to run before starting model averaging
-burn_in = 50.0
+burn_in = 1.0
 # Prior Variance
-sigma_theta = 1.0
+sigma_theta = 0.1
 
 
 # Pinball parameter/ quantile to learn
