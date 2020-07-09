@@ -4,11 +4,11 @@ import utils as ut
 ## Set parameters
 
 # Number of hidden layers
-num_hidden = 2
+num_hidden = 4
 # Number of nodes per hidden layer
 nodes = 32
 # Size of batches inS each step
-batch_size = 500
+batch_size = 1000
 # Training Sample Size
 train_n = 100
 # Testing Sample Size
@@ -16,14 +16,14 @@ test_n = 100
 # Testing Batch Size
 t_batch_size=500
 # Learning rate
-step_size = 0.03
+step_size = 0.001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 200
+num_epochs = 2000
 # Number of epochs to run before starting model averaging
 burn_in = 1.0
-# Prior Variance
+# Prior SD
 sigma_theta = 0.1
 
 
@@ -46,3 +46,4 @@ t_batch_labels = junk['outcome']
 t_batch_data = junk['W'].reshape((t_batch_size,test_n,1))
 t_sigma_posterior = pow(test_n + 1.0/pow(sigma_theta,2), -0.5)
 t_exact_quants = pow(t_sigma_posterior,2)*(test_n*np.mean(t_batch_data,axis=1))
+base_risk = np.mean(np.abs(t_batch_labels-t_exact_quants))/2

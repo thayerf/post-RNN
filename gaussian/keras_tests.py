@@ -7,7 +7,6 @@ import genDat as gd
 import utils as ut
 from keras import backend as K
 from keras import callbacks
-import matplotlib.pyplot as plt
 from functools import partial
 from params import *
 from model_infrastructure import *
@@ -19,6 +18,7 @@ print("Training on n= {:02d}, testing on n = {:03d}".format(train_n,test_n))
 print("Prior variance is {:01.6f}".format(pow(sigma_theta,2)))
 print("Posterior variance for training is {:01.6f}".format(pow(sigma_posterior,2)))
 print("Posterior variance for testing is {:01.6f}".format(pow(t_sigma_posterior,2)))
+print("Risk of true minimizer is {:01.6f}".format(base_risk))
 print("Fitting RNN with the following architecture")
 
 
@@ -36,7 +36,7 @@ print(model.summary(90))
 # Initialize optimizer with given step size
 adam = optimizers.adam(lr = step_size, decay = step_size/num_epochs)
 # Compile model w/ pinball loss, use mse as metric
-model.compile(loss="mean_squared_error",
+model.compile(loss=pinball,
               optimizer=adam)      
 # Train the model using generator and callbacks we defined w/ test set as validation
 history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs=num_epochs,
@@ -46,9 +46,6 @@ history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs
 # Save test data
 np.savetxt("labels.csv", t_batch_labels, delimiter=",")
 np.savetxt("data.csv", t_batch_data[:,:,0], delimiter=",")
-# Save miscoverage and predictions from test set.
-#np.savetxt("pb_mis",my_average.miscover)
-#np.savetxt("pb_avg",my_average.avg_miscover)
-#np.savetxt("average_preds", my_average.avg_model.predict(my_average.test))
+# Save predictions and loss
+np.savetxt("preds", model.predict(t_batch_data))
 np.savetxt("loss", hist.history['val_loss'])
-#np.savetxt("avg_loss", my_average.avg_loss)

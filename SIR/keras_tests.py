@@ -7,7 +7,6 @@ import genDat as gd
 import utils as ut
 from keras import backend as K
 from keras import callbacks
-import matplotlib.pyplot as plt
 from functools import partial
 from params import *
 from model_infrastructure import *

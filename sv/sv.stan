@@ -21,4 +21,4 @@ model {
     h[i]~normal(mu+(2*phi-1)*(h[i-1]-mu),sqrt(1.5*sigma));
     y[i]~normal(0,sqrt(exp(h[i])));
   }
-}
+};

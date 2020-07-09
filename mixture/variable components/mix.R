@@ -12,7 +12,8 @@ cor(rnn_preds, labels)
 
 data <- as.matrix(data)
 
-
+losses <- abs(rnn_preds-labels)
+pred_se <- sd(losses)/sqrt(length(losses))
 # Plug in test data
 library(mclust)
 comps <- rep(0, 500)
@@ -67,6 +68,7 @@ for(i in 1:500){
 
 
 stan_mad <- mean(abs(preds50-labels))
+
 stan_prior_mad <- mean(abs(prior_mean50-labels))
 rnn_losses <- c()
 rnn_losses$loss <- c(mean(abs(labels)),2*loss[,1])
@@ -91,14 +93,16 @@ width <- 2
 
 colors <- c(rgb(56.25/255,34.50/255,113.25/255,0.3), rgb(0,0,1,0.8))
 
-inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 201))
+inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 201))*150
 
-pdf("deep-learning.pdf", width = 6, height = 4)
-plot(inds.to.use,rnn_losses$loss, type = 'n', yaxs ='i', xlab = "Epoch", ylab = "risk", ylim = c(0.00,1.0))
+pdf("mfm.pdf", width = 6, height = 4)
+plot(inds.to.use,rnn_losses$loss, type = 'n', yaxs ='i',
+     xlab = "Number of Simulated Datasets", ylab = "risk", ylim = c(0.00,0.80))
 lines(inds.to.use,rnn_losses$loss, lwd = width, col = colors[1])
 abline(h= stan_mad, lwd= width,lty = 2)
 abline(h= stan_prior_mad, lwd = width, lty = 2, col = 'blue')
 abline(h = mean(abs(labels-julia)), col = 'red', lwd = width, lty= 2)
 legend(x = 'topright', legend=c("RNN", "BIC + STAN", "Julia", "Prior Mean # of Clusters + STAN"),
        col=c(colors[1], "black","red","blue"), lty=c(1,2,2,2), cex=0.8)
+arrows(max(inds.to.use), 2*tail(loss[,1], n=1)-1.96*pred_se,max(inds.to.use),2*tail(loss[,1], n=1)+1.96*pred_se,length=0.05, angle=90, code=3)
 dev.off()
