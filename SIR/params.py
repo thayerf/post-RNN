@@ -16,13 +16,15 @@ test_n = 250
 # Testing Batch Size
 t_batch_size=2000
 # Learning rate
-step_size = 0.0001
+step_size = 0.00001
 # Learning rate decay
 decay_size = .0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 300
+num_epochs = 2000
+# Number of epochs to run before starting model averaging
+burn_in = 100.0
 
 
 
