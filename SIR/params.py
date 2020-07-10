@@ -4,11 +4,11 @@ import utils as ut
 # NETWORK STUFF
 
 # Number of hidden layers
-num_hidden = 4
+num_hidden = 8
 # Number of nodes per hidden layer
 nodes = 64
 # Size of batches in each step
-batch_size = 100
+batch_size = 1000
 # Training Sample Size
 train_n = 250
 # Testing Sample Size

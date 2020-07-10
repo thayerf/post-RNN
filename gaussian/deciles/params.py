@@ -4,9 +4,9 @@ import utils as ut
 ## Set parameters
 
 # Number of hidden layers
-num_hidden = 4
+num_hidden = 8
 # Number of nodes per hidden layer
-nodes = 32
+nodes = 64
 # Size of batches inS each step
 batch_size = 1000
 # Training Sample Size
@@ -20,7 +20,7 @@ step_size = 0.0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 5000
+num_epochs = 2000
 # Number of epochs to run before starting model averaging
 burn_in = 1.0
 # Prior SD
