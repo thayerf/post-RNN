@@ -73,19 +73,19 @@ stan_prior_mad <- mean(abs(prior_mean50-labels))
 rnn_losses <- c()
 rnn_losses$loss <- c(mean(abs(labels)),2*loss[,1])
 rnn_losses$index <- 1:length(rnn_losses$loss)
-lo10 <- loess(loss~index,data= rnn_losses, span = 0.1)
+lo10 <- loess(loss/mean(abs(labels-julia))~index,data= rnn_losses, span = 0.1)
 plot(lo10, type="l", col="red", lwd=5, xlab="Epoch", ylab="Loss", main="Neural Net vs. BIC + STAN",
-     ylim = range(0:1))
-abline(h= stan_mad, lwd= 3,lty = 2)
-abline(h= stan_prior_mad, lwd = 3, lty = 2, col = 'blue')
-abline(h = mean(abs(labels-julia)), col = 'green', lwd = 3, lty= 2)
+     ylim = range(0:20))
+abline(h= stan_mad/mean(abs(labels-julia)), lwd= 3,lty = 2)
+abline(h= stan_prior_mad/mean(abs(labels-julia)), lwd = 3, lty = 2, col = 'blue')
+abline(h = 1, col = 'green', lwd = 3, lty= 2)
 legend(x = 'topright', legend=c("RNN", "BIC + STAN", "Julia", "Prior Mean # of Clusters + STAN"),
        col=c("red", "black","green","blue"), lty=c(1,2,2), cex=0.8)
 load("stan_mad")
 load("stan_prior_mad")
 
 
-
+pred_se = sd(rnn_preds-labels)/(sqrt(500))
 
 max.epoc <- 201
 
@@ -93,16 +93,16 @@ width <- 2
 
 colors <- c(rgb(56.25/255,34.50/255,113.25/255,0.3), rgb(0,0,1,0.8))
 
-inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 201))*150
+inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 200))*10000
 
 pdf("mfm.pdf", width = 6, height = 4)
-plot(inds.to.use,rnn_losses$loss, type = 'n', yaxs ='i',
-     xlab = "Number of Simulated Datasets", ylab = "risk", ylim = c(0.00,0.80))
-lines(inds.to.use,rnn_losses$loss, lwd = width, col = colors[1])
-abline(h= stan_mad, lwd= width,lty = 2)
-abline(h= stan_prior_mad, lwd = width, lty = 2, col = 'blue')
-abline(h = mean(abs(labels-julia)), col = 'red', lwd = width, lty= 2)
+lo10 <- loess(2*loss[,1]/mean(abs(labels-julia))~inds.to.use, span = 0.1)
+plot(x= inds.to.use, y =predict(lo10), type="l", col=colors[1], lwd=5, xlab="Number of Simulated Datasets", ylab="Standardized Risk", main="Neural Net vs. BIC + STAN",
+     ylim = range(0:20))
+abline(h= stan_mad/mean(abs(labels-julia)), lwd= width,lty = 2)
+abline(h= stan_prior_mad/mean(abs(labels-julia)), lwd = width, lty = 2, col = 'blue')
+abline(h = 1, col = 'red', lwd = width, lty= 2)
 legend(x = 'topright', legend=c("RNN", "BIC + STAN", "Julia", "Prior Mean # of Clusters + STAN"),
        col=c(colors[1], "black","red","blue"), lty=c(1,2,2,2), cex=0.8)
-arrows(max(inds.to.use), 2*tail(loss[,1], n=1)-1.96*pred_se,max(inds.to.use),2*tail(loss[,1], n=1)+1.96*pred_se,length=0.05, angle=90, code=3)
+arrows(max(inds.to.use), 2*(tail(loss[,1], n=1)-1.96*pred_se)/mean(abs(labels-julia)),max(inds.to.use),2*(tail(loss[,1], n=1)+1.96*pred_se)/mean(abs(labels-julia)),length=0.05, angle=90, code=3)
 dev.off()

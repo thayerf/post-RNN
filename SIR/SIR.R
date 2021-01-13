@@ -19,7 +19,7 @@ for(i in 1:2000){
   res[i]<-summary(my_model)$summary[3,5]
 }
 
-stan_loss <- mean(0.5*abs(res-labels))
+stan_loss <- mean(0.5*abs(res[1:1208]-labels[1:1208]))
 
 
 
@@ -31,12 +31,12 @@ width <- 2
 
 colors <- c(rgb(56.25/255,34.50/255,113.25/255,0.3), rgb(0,0,1,0.8))
 
-inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 2000))*100
-pdf("sir.pdf", width = 6, height = 4)
+inds.to.use <- round(seq(from = 1, to = max.epoc, length.out = 2000))*1000
+#pdf("sir.pdf", width = 6, height = 4)
 plot(inds.to.use,loss, type = 'n', yaxs ='i', xlab = "Number of Simulated Datasets", ylab = "risk", ylim = c(0.00,2.0))
-lines(inds.to.use,predict(loess(loss~c(1:2000), span = 0.1)), lwd = width, col = colors[1])
-abline(h= stan_loss, lwd= width,lty = 2, col = "red")
+lines(inds.to.use,predict(loess(loss/stan_loss~c(1:2000), span = 0.1)), lwd = width, col = colors[1])
+abline(h= 1.0, lwd= width,lty = 2, col = "red")
 legend(x = 'topright', legend=c("RNN", "Stan"),
        col=c(colors[1],"red"), lty=c(1,2), cex=0.8)
-arrows(max(inds.to.use), tail(loss, n=1)-1.96*pred_se,max(inds.to.use),tail(loss, n=1)+1.96*pred_se,length=0.05, angle=90, code=3)
-dev.off()
+arrows(max(inds.to.use), (tail(loss, n=1)-1.96*pred_se)/stan_loss,max(inds.to.use),(tail(loss, n=1)+1.96*pred_se)/stan_loss,length=0.05, angle=90, code=3)
+#dev.off()

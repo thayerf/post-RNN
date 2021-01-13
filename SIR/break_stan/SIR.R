@@ -18,10 +18,10 @@ for(i in 1:2000){
   res[i]<-summary(my_model)$summary[3,5]
 }
 
-stan_loss <- mean(0.5*abs(res-labels))
+stan_loss <- mean(0.5*abs(res[1:1745]-labels[1:1745]))
 
 
-max.epoc <- 300
+max.epoc <- 2000
 
 width <- 2
 

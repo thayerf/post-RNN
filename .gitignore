@@ -174,3 +174,5 @@ mixture/Stan/stan_preds
 pinball/average_preds
 pinball/pb_avg
 pinball/pb_mis
+*.pyc
+*.pdf
