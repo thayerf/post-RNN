@@ -45,5 +45,5 @@ t_batch_labels = junk['outcome']
 
 t_batch_data = junk['W'].reshape((t_batch_size,test_n,1))
 t_sigma_posterior = pow(test_n + 1.0/pow(sigma_theta,2), -0.5)
-t_batch_labels = [np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels),np.array(t_batch_labels)]
+t_batch_labels = [np.array(t_batch_labels),np.array(t_batch_labels)]
 t_exact_quants = pow(t_sigma_posterior,2)*(test_n*np.mean(t_batch_data,axis=1))
