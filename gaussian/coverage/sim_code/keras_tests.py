@@ -69,11 +69,11 @@ history = model.fit_generator(
     callbacks=[hist],
 )
 # Save test data
-np.savetxt("results/labels.csv", t_batch_labels[0][:, 0], delimiter=",")
-np.savetxt("results/data.csv", t_batch_data[:, :, 0], delimiter=",")
+np.savetxt("../results/labels.csv", t_batch_labels[0][:, 0], delimiter=",")
+np.savetxt("../results/data.csv", t_batch_data[:, :, 0], delimiter=",")
 # Save miscoverage and predictions from test set.
 # np.savetxt("pb_mis",my_average.miscover)
 # np.savetxt("pb_avg",my_average.avg_miscover)
-np.savetxt("preds", np.squeeze(model.predict(t_batch_data),axis = 2))
-np.savetxt("loss", hist.history["val_loss"])
+np.savetxt("../results/preds", np.squeeze(model.predict(t_batch_data),axis = 2))
+np.savetxt("../results/loss", hist.history["val_loss"])
 # np.savetxt("avg_loss", my_average.avg_loss)
