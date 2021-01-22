@@ -9,16 +9,17 @@ from keras.layers import LSTM, Dense, TimeDistributed, SimpleRNN, Input
 from keras.utils import to_categorical
 from keras import optimizers
 from keras import initializers
-# Build Model
-model = Sequential()
-
+## Build model
 # Add input layer
-model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 2)))
+inputs = Input((None, 1))
+x = SimpleRNN(nodes, return_sequences=True)(inputs)
 # Add additional hidden layers
-for i in range(num_hidden-1):
-      model.add(SimpleRNN(nodes, return_sequences=True))
+for i in range(num_hidden - 1):
+    x = SimpleRNN(nodes, return_sequences=True)(x)
 # Add output layer
-model.add(SimpleRNN(2, activation = None))
+o1 = SimpleRNN(1, activation="linear")(x)
+o2 = SimpleRNN(1, activation="linear")(x)
+model = Model(inputs, [o1, o2])
 # Define data iterator
 def genTraining(batch_size):
     while True:
