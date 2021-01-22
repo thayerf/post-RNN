@@ -41,11 +41,11 @@ def pinball_combined(y_true, y_pred):
     return pin
 
 
-def pin_025(y_true,y_pred):
+def pin_05(y_true,y_pred):
       y_025 = y_pred
-      pin = K.mean(K.maximum(.025 * (y_true-y_025), (.025-1) * (y_true-y_025)))
+      pin = K.mean(K.maximum(.05 * (y_true-y_025), (.05-1) * (y_true-y_025)))
       return pin
-def pin_975(y_true,y_pred):
+def pin_95(y_true,y_pred):
       y_975 = y_pred
-      pin = K.mean(K.maximum(.975 * (y_true-y_975), (.975-1) * (y_true-y_975)))
+      pin = K.mean(K.maximum(.95 * (y_true-y_975), (.95-1) * (y_true-y_975)))
       return pin
