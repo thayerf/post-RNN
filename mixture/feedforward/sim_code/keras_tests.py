@@ -24,18 +24,16 @@ hist= callbacks.History()
 # Print model summary
 print(model.summary(90))
 adam = optimizers.adam(lr = step_size, decay = decay_size)
-model.compile(loss={'o1': pin_025, 'o2': pin_975},optimizer=adam)           
+model.compile(loss=pin_5,optimizer=adam)           
 # Train the model on this epoch
 history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs=num_epochs,
                               steps_per_epoch=steps_per_epoch,
-                              validation_data = (t_batch_data,[t_batch_labels,t_batch_labels]),
+                              validation_data = (t_batch_data,t_batch_labels),
                               callbacks= [hist])
 # Save test data
-np.savetxt("CI_labels.csv", t_batch_labels, delimiter=",")
-np.savetxt("CI_data.csv", t_batch_data[:,:,0], delimiter=",")
+np.savetxt("../results/labels.csv", t_batch_labels, delimiter=",")
+np.savetxt("../results/data.csv", t_batch_data, delimiter=",")
 # Save test set preds
-np.savetxt("CI_average_preds", model.predict(t_batch_data))
+np.savetxt("../results/preds", model.predict(t_batch_data))
+np.savetxt("../results/loss", hist.history["val_loss"])
 
-preds = model.predict(t_batch_data)
-coverage = np.mean(np.equal(preds[:,0]<t_batch_labels,preds[:,2]> t_batch_labels))
-width = np.mean(np.abs(preds[:,0]-preds[:,2]))

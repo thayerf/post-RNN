@@ -31,7 +31,7 @@ def genTraining(batch_size,train_n,sigma_theta):
         # We repeat the labels for each x in the sequence
         batch_labels = junk['outcome']
         batch_data = junk['W'].reshape((batch_size,train_n))
-        yield [batch_data,[batch_labels,batch_labels]]
+        yield [batch_data,batch_labels]
 
 def pinball_combined(y_true, y_pred):
     y_025, y_500,y_975 = tf.gather(y_pred,)
