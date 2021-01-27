@@ -9,17 +9,17 @@ from keras.layers import LSTM, Dense, TimeDistributed, SimpleRNN, Input
 from keras.utils import to_categorical
 from keras import optimizers
 from keras import initializers
-## Build model
-# Add input layer
-inputs = Input((None, 2))
-x = SimpleRNN(nodes, return_sequences=True)(inputs)
-# Add additional hidden layers
-for i in range(num_hidden - 1):
-    x = SimpleRNN(nodes, return_sequences=True)(x)
+# Build Model
+inputs = Input((None,2))
+x = SimpleRNN(32,return_sequences = True)(inputs)
+
+#Add additional hidden layers
+for i in range(num_hidden-1):
+      x = SimpleRNN(nodes, return_sequences=True)(x)
 # Add output layer
-o1 = SimpleRNN(1, activation="linear")(x)
-o2 = SimpleRNN(1, activation="linear")(x)
-model = Model(inputs, [o1, o2])
+o1 = SimpleRNN(1,activation = 'linear')(x)
+o2 = SimpleRNN(1,activation = 'linear')(x)
+model = Model(inputs, [o1,o2])
 # Define data iterator
 def genTraining(batch_size):
     while True:
@@ -33,7 +33,7 @@ def genTraining(batch_size):
         else:
               batch_labels = np.zeros([1,])
               batch_data = np.zeros([1,1,1])
-        yield batch_data,[batch_labels,batch_labels]
+        yield batch_data,[batch_labels, batch_labels]
         
         
         
@@ -70,7 +70,7 @@ class average(callbacks.Callback):
     
     self.n = self.n+1
 
-def pinball(tao,y_true, y_pred,sample_weight = None):
+def pinball(tao, y_true, y_pred,sample_weight = None):
     pin = K.mean(K.maximum(y_true - y_pred, 0) * tao +
                  K.maximum(y_pred - y_true, 0) * (1 - tao))
     return pin
