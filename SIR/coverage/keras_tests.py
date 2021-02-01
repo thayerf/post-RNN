@@ -40,7 +40,7 @@ np.savetxt("./results/I_data.csv", t_batch_data[:,:,0], delimiter=",")
 np.savetxt("./results/S_data.csv", t_batch_data[:,:,1], delimiter=",")
 
 # Save test set preds
-np.savetxt("./results/preds", model.predict(t_batch_data))
+np.savetxt("./results/preds", model.predict(t_batch_data)[:,:,0])
 # Save  model loss
 np.savetxt("./results/loss", hist.history['val_loss'])
 # Save my model
