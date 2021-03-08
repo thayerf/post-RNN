@@ -23,7 +23,7 @@ hist= callbacks.History()
 
 # Print model summary
 print(model.summary(90))
-adam = optimizers.adam(lr = step_size, decay = decay_size)
+adam = optimizers.adam(lr = step_size)
 model.compile(loss={'o1': pin_05, 'o2': pin_95},optimizer=adam)           
 # Train the model on this epoch
 history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs=num_epochs,
@@ -35,4 +35,7 @@ history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs
 np.savetxt("./results/labels.csv", t_batch_labels, delimiter=",")
 np.savetxt("./results/data.csv", t_batch_data[:,:,0], delimiter=",")
 # Save test set preds
-np.savetxt("./results/preds", model.predict(t_batch_data)[:,:,0])
+print(model.predict(t_batch_data))
+np.shape(model.predict(t_batch_data))
+np.savetxt("./results/preds_05", model.predict(t_batch_data)[0])
+np.savetxt("./results/preds_95", model.predict(t_batch_data)[1])
