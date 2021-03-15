@@ -38,10 +38,12 @@ history = model.fit_generator(genTraining(batch_size),epochs=num_epochs,
 np.savetxt("./results/labels.csv", t_batch_labels, delimiter=",")
 np.savetxt("./results/I_data.csv", t_batch_data[:,:,0], delimiter=",")
 np.savetxt("./results/S_data.csv", t_batch_data[:,:,1], delimiter=",")
-
+print(model.predict(t_batch_data))
+np.shape(model.predict(t_batch_data))
 # Save test set preds
-np.savetxt("./results/preds", model.predict(t_batch_data)[:,:,0])
+np.savetxt("./results/preds_05", model.predict(t_batch_data)[0])
+np.savetxt("./results/preds_95", model.predict(t_batch_data)[1])
 # Save  model loss
 np.savetxt("./results/loss", hist.history['val_loss'])
 # Save my model
-model.save("./results/SIR_model")
+#model.save("./results/SIR_model")

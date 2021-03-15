@@ -74,6 +74,6 @@ np.savetxt("../results/data.csv", t_batch_data[:, :, 0], delimiter=",")
 # Save miscoverage and predictions from test set.
 # np.savetxt("pb_mis",my_average.miscover)
 # np.savetxt("pb_avg",my_average.avg_miscover)
-np.savetxt("../results/preds", np.squeeze(model.predict(t_batch_data),axis = 2))
+np.save("../results/preds", model.predict(t_batch_data))
 np.savetxt("../results/loss", hist.history["val_loss"])
 # np.savetxt("avg_loss", my_average.avg_loss)

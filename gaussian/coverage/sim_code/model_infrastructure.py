@@ -17,8 +17,8 @@ x = SimpleRNN(32, return_sequences=True)(inputs)
 for i in range(num_hidden - 1):
     x = SimpleRNN(nodes, return_sequences=True)(x)
 # Add output layer
-o1 = SimpleRNN(1, activation="linear")(x)
-o2 = SimpleRNN(1, activation="linear")(x)
+o1 = SimpleRNN(1, activation="linear",return_sequences = True)(x)
+o2 = SimpleRNN(1, activation="linear",return_sequences = True)(x)
 model = Model(inputs, [o1, o2])
 
 
@@ -84,6 +84,6 @@ class average(callbacks.Callback):
 # Pinball loss for quantile tao
 def pinball(tao, y_true, y_pred, sample_weight=None):
     pin = K.mean(
-        K.maximum(y_true - y_pred, 0) * tao + K.maximum(y_pred - y_true, 0) * (1 - tao)
+            K.maximum(y_true - y_pred[:,1999:2000,:], 0) * tao + K.maximum(y_pred[:,1999:2000,:] - y_true, 0) * (1 - tao)
     )
     return pin

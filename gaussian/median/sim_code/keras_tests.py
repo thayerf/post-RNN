@@ -49,3 +49,4 @@ np.savetxt("data.csv", t_batch_data[:,:,0], delimiter=",")
 # Save predictions and loss
 np.savetxt("preds", model.predict(t_batch_data))
 np.savetxt("loss", hist.history['val_loss'])
+model.save("my_model")

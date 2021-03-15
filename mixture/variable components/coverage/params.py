@@ -1,33 +1,35 @@
 import numpy as np
 import genDat as gd
 import utils as ut
-## Set parameters
+# Set parameters
 
 # Number of hidden layers
 num_hidden = 4
 # Number of nodes per hidden layer
 nodes = 32
-# Size of batches inS each step
-batch_size = 1000
+# Size of batches in each step
+batch_size = 150
 # Training Sample Size
-train_n = 2000
+train_n = 250
 # Testing Sample Size
-test_n = 2000
+test_n = 250
 # Testing Batch Size
-t_batch_size=5000
+t_batch_size=500
 # Learning rate
-step_size = .0004
+step_size = 0.0001
+# Learning rate decay
+decay_size = .00001
 # Number of steps per epoch
-steps_per_epoch = 1
+steps_per_epoch = 150
 # Number of epochs
-num_epochs = 10000
+num_epochs = 200
 # Number of epochs to run before starting model averaging
-burn_in = 1.0
-# Prior SD
-sigma_theta = 0.1
+burn_in = 100.0
+# Prior Variance
+sigma_theta = 0.5
 
 
-# Pinball parameter/ quantile to learn
+# Pinball parameter
 tao = 0.5
 quant = np.array([0.5])
 
@@ -45,5 +47,4 @@ t_batch_labels = junk['outcome']
 
 t_batch_data = junk['W'].reshape((t_batch_size,test_n,1))
 t_sigma_posterior = pow(test_n + 1.0/pow(sigma_theta,2), -0.5)
-t_batch_labels = [np.array(t_batch_labels),np.array(t_batch_labels)]
 t_exact_quants = pow(t_sigma_posterior,2)*(test_n*np.mean(t_batch_data,axis=1))
