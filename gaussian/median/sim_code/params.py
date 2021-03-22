@@ -8,7 +8,7 @@ num_hidden = 4
 # Number of nodes per hidden layer
 nodes = 32
 # Size of batches inS each step
-batch_size = 1000
+batch_size = 2000
 # Training Sample Size
 train_n = 100
 # Testing Sample Size
@@ -16,11 +16,11 @@ test_n = 100
 # Testing Batch Size
 t_batch_size=500
 # Learning rate
-step_size = 0.001
+step_size = 0.0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 2000
+num_epochs = 5000
 # Number of epochs to run before starting model averaging
 burn_in = 1.0
 # Prior SD

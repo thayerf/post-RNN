@@ -23,7 +23,7 @@ hist= callbacks.History()
 
 # Print model summary
 print(model.summary(90))
-adam = optimizers.adam(lr = step_size)
+adam = optimizers.adam(lr = step_size )
 model.compile(loss={'o1': pin_05, 'o2': pin_95},optimizer=adam)           
 # Train the model on this epoch
 history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs=num_epochs,
