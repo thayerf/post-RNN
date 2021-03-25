@@ -4,11 +4,11 @@ import utils as ut
 # NETWORK STUFF
 
 # Number of hidden layers
-num_hidden = 8
+num_hidden = 10
 # Number of nodes per hidden layer
 nodes = 64
 # Size of batches in each step
-batch_size = 1000
+batch_size = 2000
 # Training Sample Size
 train_n = 250
 # Testing Sample Size
@@ -22,7 +22,7 @@ decay_size = .0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 2000
+num_epochs = 5000
 # Number of epochs to run before starting model averaging
 burn_in = 100.0
 
