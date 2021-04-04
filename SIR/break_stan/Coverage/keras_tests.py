@@ -20,7 +20,7 @@ junk = ut.setup_nn_mat(t_dat)
 t_batch_labels = junk['outcome']
 
 
-t_batch_data = junk['W'].reshape((t_batch_size,100,2))
+t_batch_data = junk['W'].reshape((t_batch_size,6,2))
 
 # Create Callbacks
 hist= callbacks.History()
