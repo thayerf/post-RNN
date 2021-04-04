@@ -21,7 +21,8 @@ print("Posterior variance for testing is {:01.6f}".format(pow(t_sigma_posterior,
 print("Risk of true minimizer is {:01.6f}".format(base_risk))
 print("Fitting RNN with the following architecture")
 
-
+test_n = sys.argv[1]
+train_n = sys.argv[1]
 # Create Callbacks
 #my_average = average(t_batch_data,t_exact_quants,t_sigma_posterior, num_hidden, t_batch_labels)
 # This callback will give loss vs. epoch in the logs
