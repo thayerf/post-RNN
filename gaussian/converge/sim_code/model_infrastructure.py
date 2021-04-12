@@ -16,7 +16,7 @@ model.add(SimpleRNN(nodes, return_sequences=True, input_shape=(None, 1)))
 for i in range(num_hidden-1):
       model.add(SimpleRNN(nodes, return_sequences=True))
 # Add output layer
-model.add(SimpleRNN(1, return_sequences = True, activation = "linear"))
+model.add(SimpleRNN(1, activation = "linear"))
 
 
 ## Define training data iterator
@@ -77,6 +77,6 @@ class average(callbacks.Callback):
 # Pinball loss for quantile tao
 def pinball(y_true, y_pred):
     print(K.int_shape(y_pred)[1])
-    pin = K.mean(K.maximum(y_true - y_pred[:,999:1000,:], 0) * tao +
-                 K.maximum(y_pred[:,999:1000,:] - y_true, 0) * (1 - tao))
+    pin = K.mean(K.maximum(y_true - y_pred, 0) * tao +
+                 K.maximum(y_pred - y_true, 0) * (1 - tao))
     return pin

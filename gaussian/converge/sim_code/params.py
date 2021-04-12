@@ -20,7 +20,7 @@ step_size = 0.0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 2000
+num_epochs = 1000
 # Number of epochs to run before starting model averaging
 burn_in = 1.0
 # Prior SD

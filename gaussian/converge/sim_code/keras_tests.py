@@ -10,7 +10,7 @@ from keras import callbacks
 from functools import partial
 from params import *
 from model_infrastructure import *
-
+import sys
 # For reproducebility
 np.random.seed(1408)  
 # Print parameters
@@ -21,8 +21,9 @@ print("Posterior variance for testing is {:01.6f}".format(pow(t_sigma_posterior,
 print("Risk of true minimizer is {:01.6f}".format(base_risk))
 print("Fitting RNN with the following architecture")
 
-test_n = sys.argv[1]
-train_n = sys.argv[1]
+test_n = int(sys.argv[1])
+train_n = int(sys.argv[1])
+print(test_n)
 # Create Callbacks
 #my_average = average(t_batch_data,t_exact_quants,t_sigma_posterior, num_hidden, t_batch_labels)
 # This callback will give loss vs. epoch in the logs
@@ -48,6 +49,6 @@ history = model.fit_generator(genTraining(batch_size,train_n,sigma_theta),epochs
 np.savetxt("labels.csv", t_batch_labels, delimiter=",")
 np.savetxt("data.csv", t_batch_data[:,:,0], delimiter=",")
 # Save predictions and loss
-np.savetxt("loss", hist.history['val_loss'])
+np.savetxt("loss" + str(train_n) , hist.history['val_loss'])
 model.save("my_model")
-np.savetxt('preds',model.predict(t_batch_data)[:,:,0])
+np.savetxt('preds',model.predict(t_batch_data))

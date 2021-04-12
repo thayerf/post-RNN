@@ -22,7 +22,7 @@ decay_size = .0001
 # Number of steps per epoch
 steps_per_epoch = 1
 # Number of epochs
-num_epochs = 1000
+num_epochs = 500
 # Number of epochs to run before starting model averaging
 burn_in = 100.0
 
